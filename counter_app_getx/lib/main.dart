@@ -1,6 +1,7 @@
 import 'package:counter_app_getx/getx_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -22,7 +23,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key, required this.title});
 
@@ -42,17 +42,42 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GetBuilder<Controller>(
-              builder: (_) => Text(
-                getxController.count.toString(),
-              ),
-            )
+              builder: (_) {
+                return Center(
+                  child: Text(getxController.count.toString()),
+                );
+              },
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Get.to(SecondPage());
+                },
+                child: Text('Rote')),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => getxController.increment(),
+        onPressed: () {
+          getxController.increment();
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  SecondPage({super.key});
+  final Controller cntrl = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          cntrl.count.toString(),
+        ),
       ),
     );
   }
